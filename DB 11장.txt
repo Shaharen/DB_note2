@@ -1,0 +1,73 @@
+2 파일
+ p. 15
+
+< 뷰 >
+p. 18 ~ 
+
+	뷰
+
+ - 가짜 / 논리 테이블
+ - 물질적인 구조 X
+ - D.D에 text 자체만 저장 ( D.D = Data Dictionary )
+
+ 단순 뷰 : 원본 데이터
+ 복합 뷰 : 변경된 데이터
+
+
+- 뷰에 insert 하면 table 에도 insert
+
+
+p. 35
+인라인뷰
+
+select rownum, employee_id, salary
+from employees
+where rownum < 4
+
+rownum = 행이 출력된 '이후'의 행의 번호
+
+즉 where rownum > 4 로 할경우 첫번호가 1번이므로 출력이 안됨
+
+
+p. 36
+ * Top - N 분석 
+ - 봉급이 가장 낮은 4명을 출력하시오
+예제 2-1 )
+select rownum, employee_id, salary
+from (select employee_id, salary
+	from employees
+	order by salary )
+where rownum < 4
+== > 봉급이 가장 낮은 4명
+
+예제 2-2 ) 
+select rownum, employee_id, salary
+from employees
+where rownum < 4
+order by salary
+== >  where절이 order by 절보다 먼저 실행되어 원하는 자료가 나오지않음
+== > 그냥 1~3줄 나옴
+
+예제 ) 평균급여가 높은 상위 3개 부서의 번호와 평균급여를 출력하시오
+select rownum, department_id, avg
+from (select department_id, avg(salary) avg
+	from employees
+	group by department_id
+	order by avg(salary) desc )
+where rownum < 4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

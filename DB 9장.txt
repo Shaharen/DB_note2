@@ -1,0 +1,104 @@
+p. 369                   < DDL >
+
+p. 372 < 네이밍 규칙 >
+
+p. 376 < 테이블 생성 >
+
+< 데이터베이스 구축 >
+ 1. table 생성
+ 2. data 삽입
+ 3. 저장
+
+p. 379 < 데이터 유형 >
+
+char(5) : 고정길이
+ - aaa 입력 -> 이미 배정되어있는 5칸에 aaa 할당 후 남은칸 안씀
+ - 성능 압도적으로 좋음
+ - 공간 낭비가 심함
+=> 돈 많은 곳에서 씀
+
+varchar2(5) : 가변길이
+ - aaa 입력 -> 입력된 크기를 보고 칸을 배정함
+ - 성능 안 좋음
+ - 공간 낭비가 없음
+=> 돈 적은 곳에서 씀
+
+number -> - , 0 , + 전부 표현
+number(p) -> p 자리
+number(p,s) -> p 자리 중 s 자릿수 만큼 소수점이하 표시
+
+p. 381 
+hire_date timestamp : hire_date 의 소수점 이하 초까지 포함하여 날짜 표기
+
+p. 388
+예제 ) 90번 부서에 근무하는 사원의 이름과 급여를 저장하는 dept90테이블을 생성
+
+1. dept90 생성 
+ create table dept90
+ (last_name char(10)
+ salary number(5));
+
+2. 데이터 조회
+select last_name, salary
+from employees
+where department_id = 90;
+
+3. 데이터 삽입 (x 줄수만큼)
+insert into dept90
+values
+
+4. commit
+
+5. 한번에 하기
+create table dept90
+as (서브쿼리)
+select last_name, salary
+from employees
+where department_id = 90
+
+예제 )
+create table dept80
+as
+select employee_id, last_name, salary*12, hire_date
+from employees
+where department_id = 80
+ ==>> 오류
+ ==>> *를 사용할 수 없음 -> 알리아스 처리
+
+
+p. 390 < ALTER TABLE >
+
+1. 컬럼 추가 ADD 
+ -> 컬럼의 마지막 열에 새로 추가됨
+ -> 추가된 열은 null값으로 들어옴
+ -> null 값 처리는  update 사용
+
+2. 데이터 타입 변경, 길이 변경 MODIFY
+ -> modify ( 컬럼이름 변경타입 및 길이 )
+ -> 테이블에 데이터가 있으면 데이터 타입은 변경 불가
+
+3. 컬럼 삭제 DROP
+ -> 삭제하는 즉시 자동저장됨 -> 복구 불가 ( 롤백불가 )
+ -> LOCK 을 테이블 전체에 걸기때문에 동시성이 저하됨
+ -> set unused 사용 ( P. 396 )
+ -> drop unused colums 는 현재 unused 인것 전부 삭제
+
+* LOCK 대상
+ 1. DML - 행 
+ 2. DDL - 테이블 전체
+
+
+
+* 삭제 명령어
+	분류	삭제		복구		공간
+delete	DML	data		rollback		남음
+
+truncate	DDL	data		불가		table의 구조 정보는 남음
+						(테이블 초기화)
+						공간 회수
+
+drop	DDL	data, DD 정보	불가		전체 삭제
+ -> * 불가 : 백업 파일이 있으면 가능
+
+
+
